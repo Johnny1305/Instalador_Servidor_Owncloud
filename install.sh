@@ -99,4 +99,5 @@ echo -e "${greenColour}[+]${endColour}${yellowColour} Nombre Base de Datos:${end
 versionSoftware
 sleep 10
 rm -rf ../owncloud
+rm -rf ../owncloud.sh
 tput cnorm
