@@ -98,6 +98,6 @@ echo -e "${greenColour}[+]${endColour}${yellowColour} Contraseña:${endColour}${
 echo -e "${greenColour}[+]${endColour}${yellowColour} Nombre Base de Datos:${endColour}${redColour} owncloud${endColour}\n"
 versionSoftware
 sleep 10
-rm -rf ../owncloud
 rm -rf ../owncloud.sh
+rm -rf ../owncloud
 tput cnorm
