@@ -30,54 +30,106 @@ function helpPanel(){
 
 #Función para ver la versión del software
 function versionSoftware(){
-    echo "Versión del software: 1.0"
+    clear
+
+    echo -e "\n${yellowColour}[+]${endColour}${grayColour} Instalador Owncloud Automático${endColour}"
+
+    echo -e "\n"
+
+    echo -e "\e[32m     ____.      .__                          ____________   \e[0m"
+    echo -e "\e[32m    |    | ____ |  |__   ____   ____ ___.__./_   \_____  \  \e[0m"
+    echo -e "\e[32m    |    |/  _ \|  |  \ /    \ /    <   |  | |   | \e[32m(__  <\e[0m  "
+    echo -e "\e[32m/\__|    (  <_> )   Y  \   |  \   |  \___  | |   |\e[32m/       \e[0m "
+    echo -e "\e[32m\________|\____/|___|  /___|  /___|  / ____| |___\e[32m/______  \e[0m"
+    echo -e "\e[32m                     \/     \/     \/\/                 \/  \e[0m"
+
+
+    echo -e "\n${yellowColour}[+]${endColour}${grayColour} Versión: 1.0${endColour}"
+    echo -e "\n${yellowColour}[+]${endColour}${grayColour} Desarrollado por${endColour}${greenColour} Johnny13${endColour}"
+    echo -e "\n${yellowColour}[+]${endColour}${grayColour} ©${endColour} ${yellowColour}$(date +'%Y')${endColour}${grayColour} Todos los derechos reservados${endColour}\n"
 }
+
+# Funcion para mostrar el nombre del programa
+
+function nombre(){
+    echo -e "\e[34m _____ _    _ _  _ ___ __   _____ __  __ ____    \e[36m ____ _  _ ___ ____  __   __   __  \e[36m ____ ____ \e[0m"
+    echo -e "\e[34m(  _  ( \/\ / (\\( / __(  ) (  _  (  )(  (  _ \  \e[36m (_  _( \\( / __(_  _)/__\\ (  ) (  ) \e[36m( ___(  _ \ \\e[0m"
+    echo -e "\e[34m )(_)( )    ( )  ( (__ )(__ )(_)( )(__)( )(_) ) \e[36m  _)(_ )  (\\__ \ )( /(__)\\ )(__ )(__ \e[36m)__) )   /\e[0m"
+    echo -e "\e[34m(_____(__/\__(_)\_\___(____(_____(______(____/  \e[36m (____(_)\_(___/(__(__)(__(____(____(____(_)\_) \e[36m  \e[0m"
+                                                                                      
+
+}
+
+
 
 # Función para descargar o actualizar archivos necesarios
 function updateFiles(){
-
-    file_path="install.sh"
-    download_url="https://ejemplo.com/archivo-para-descargar"
-
-    sudo apt install curl
+    tput civis
     clear
+    echo -e "\n${yellowColour}[+]${endColour}${grayColour} Comprobando Conectividad a Internet..."
+    sleep 1
+    clear
+    ip
+    sleep 2
+    clear
+    echo -e "\n${redColour}[-]${endColour} ${grayColour} Instalando dependencias...${endColour}\n"
+    sudo groupadd owncloud
+    sudo usermod -a -G owncloud $LOGNAME
+    git clone https://github.com/Johnny1305/owncloud.git
+    rm -rf owncloud/owncloud.sh
+    chmod +x owncloud/install.sh
+    sudo chown $LOGNAME:owncloud owncloud/
+    sudo apt install curl 2>/dev/null
+    sleep 5
+    clear
+    echo -e "\n${greenColour}[+]${endColour} ${grayColour} Dependencias instaladas${endColour}\n"
+    sleep 3
+    clear
+    echo -e "\n${yellowColour}[+]${endColour} ${grayColour} Ejecutando el Instalador Owncloud...${endColour}\n"
+    sleep 2
+    ejecute
+    rm -rf owncloud/
+    tput cnorm
+}
 
- if [ -f $file_path ]; then
-        echo "Archivo encontrado, comprobando actualizaciones..."
-        current_checksum=$(md5sum $file_path | awk '{print $1}')
-        updated_checksum=$(curl -s $download_url | md5sum | awk '{print $1}')
-        if [ $current_checksum != $updated_checksum ]; then
-            echo "Actualizaciones encontradas, actualizando archivo..."
-            curl -o $file_path $download_url
-            if [ -f $file_path ]; then
-                echo "Archivo actualizado con éxito en la ruta: $file_path"
-            else
-                echo "Error al actualizar el archivo."
-            fi
-        else
-            echo "No se encontraron actualizaciones para el archivo."
-        fi
+# Ejecutar el archivo descargado
+
+function ejecute(){
+    file_path="owncloud/install.sh"
+    tput civis
+    clear
+    if [
+
+# Comprobar conectividad
+
+function ip(){
+
+    # Dirección IP de destino
+    ip_address="8.8.8.8"
+
+    # Intenta hacer ping a la dirección IP
+    ping -c 1 $ip_address > /dev/null
+
+    # Comprueba el código de salida del último comando ejecutado
+    if [ $? -eq 0 ]; then
+      echo -e "\n${greenColour}[+]${endColour}${grayColour} Conectividad de red presente${endColour}"
     else
-        echo "Archivo no encontrado, descargando..."
-        curl -o $file_path $download_url
-        if [ -f $file_path ]; then
-            echo "Archivo descargado con éxito en la ruta: $file_path"
-        else
-            echo "Error al descargar el archivo."
-        fi
+      echo -e "\n${redColour}[-]${endColour}${grayColour} No hay conectividad de red${endColour}"
     fi
+
 }
 
 
-
+# Indicadores
 
 declare -i parameter_counter=0
 
-while getopts "huv" arg; do
+while getopts "huvm" arg; do
     case $arg in
         u) let parameter_counter+=2;;
         v) let parameter_counter+=1;;
         h) let parameter_counter+=3;;
+        m) let parameter_counter+=4;;
     esac
 done
 
@@ -86,7 +138,76 @@ if [ "$parameter_counter" -eq 2 ]; then
 elif [ "$parameter_counter" -eq 1 ]; then
     versionSoftware
 elif [ "$parameter_counter" -eq 3 ]; then
+    clear
     helpPanel
+elif [ "$parameter_counter" -eq 4 ]; then
+    ejecute
 else
+    clear
+    nombre
+    echo -e "\n${redColour}[?]${endColour} Usa el parámetro ${yellowColour}-h${endColour} para mostrar el panel de ayuda${grayColour}${endColour}\n"
+fi -e $file_path ]; then
+        echo -e "\n${yellowColour}[-]${endColour} ${grayColour} Cambiando permisos...${endColour}\n"
+        chmod +x "$file_path"
+        sleep 2
+        echo -e "\n${greenColour}[+]${endColour} ${grayColour} Ejecutando el archivo${endColour}\n"
+        source $file_path
+        sleep 2
+    else
+        echo -e "\n${redColour}[-]${endColour} ${grayColour} El archivo no existe${endColour}\n"
+        sleep 2
+        clear
+    fi
+    tput cnorm
+
+}
+
+
+
+# Comprobar conectividad
+
+function ip(){
+
+    # Dirección IP de destino
+    ip_address="8.8.8.8"
+
+    # Intenta hacer ping a la dirección IP
+    ping -c 1 $ip_address > /dev/null
+
+    # Comprueba el código de salida del último comando ejecutado
+    if [ $? -eq 0 ]; then
+      echo -e "\n${greenColour}[+]${endColour}${grayColour} Conectividad de red presente${endColour}"
+    else
+      echo -e "\n${redColour}[-]${endColour}${grayColour} No hay conectividad de red${endColour}"
+    fi
+
+}
+
+
+# Indicadores
+
+declare -i parameter_counter=0
+
+while getopts "huvm" arg; do
+    case $arg in
+        u) let parameter_counter+=2;;
+        v) let parameter_counter+=1;;
+        h) let parameter_counter+=3;;
+        m) let parameter_counter+=4;;
+    esac
+done
+
+if [ "$parameter_counter" -eq 2 ]; then
+    updateFiles
+elif [ "$parameter_counter" -eq 1 ]; then
+    versionSoftware
+elif [ "$parameter_counter" -eq 3 ]; then
+    clear
+    helpPanel
+elif [ "$parameter_counter" -eq 4 ]; then
+    ejecute
+else
+    clear
+    nombre
     echo -e "\n${redColour}[?]${endColour} Usa el parámetro ${yellowColour}-h${endColour} para mostrar el panel de ayuda${grayColour}${endColour}\n"
 fi
