@@ -20,3 +20,10 @@ introducimos la contraseña y dejamos que el script haga lo suyo.
 **Nota**
 <br>
 El script esta cifrado, por lo que no aparece el codigo fuente del mismo. Se puede ejecutar como un script sin cifrado.
+<br>
+<br>
+**Próxima Actualización**
+<br>
+Parrot
+<br>
+Kali Linux
