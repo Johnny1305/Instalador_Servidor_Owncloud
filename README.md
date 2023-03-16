@@ -24,7 +24,5 @@ El script esta cifrado, por lo que no aparece el codigo fuente del mismo. Se pue
 <br>
 **Próxima Actualización**
 <br>
-Parrot
-<br>
 Arch Linux
 
